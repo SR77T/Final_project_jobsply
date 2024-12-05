@@ -1,0 +1,100 @@
+{% extends 'layouts/sub_base.html' %}
+{% load static %}
+
+
+
+{% block sub_content %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Update Profile</h2>
+        <form method="post" action="{% url 'update_profile' user.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Left Column for Profile Picture -->
+                <div class="col-md-4 text-center">
+                    <div class="profile-img-container mb-4">
+                        {% if request.user.userprofile.profile_picture %}
+                            <img src="{{ request.user.userprofile.profile_picture.url }}" 
+                                 class="rounded-circle shadow-sm" 
+                                 style="height: 250px; width: 250px; object-fit: cover;" id="profileImagePreview">
+                        {% else %}
+                            <img src="{% static 'main/dummy.jpg' %}" 
+                                 class="rounded-circle shadow-sm" 
+                                 style="height: 250px; width: 250px; object-fit: cover;" id="profileImagePreview">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="profile_picture" class="btn btn-outline-primary btn-sm">Change Picture</label>
+                        <input type="file" name="profile_picture" id="profile_picture" class="d-none" onchange="previewProfileImage(event)">
+                    </div>
+                </div>
+
+                <!-- Right Column for Profile Information -->
+                <div class="col-md-8">
+                    <div class="form-group mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" id="first_name" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}" id="last_name" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" value="{{ user.email }}" id="email" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" name="address" value="{{ user.userprofile.address }}" id="address" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="phone_number" class="form-label">Phone Number</label>
+                        <input type="text" name="phone_number" value="{{ user.userprofile.phone_number }}" id="phone_number" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="resume" class="form-label">Resume</label>
+                        <input type="file" name="resume" id="resume" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="bio" class="form-label">Bio</label>
+                        <textarea maxlength="1000" cols="30" name="bio" id="bio" class="form-control" rows="4">{{ user.userprofile.bio }}</textarea>
+                    </div>
+
+                    <div class="form-group d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success px-4">Save Changes</button>
+                        <a class="btn btn-outline-danger px-4" href="{% url 'user_profile' user.id %}">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    function previewProfileImage(event) {
+        const fileInput = event.target;
+        const previewImage = document.getElementById('profileImagePreview');
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function (e) {
+                previewImage.src = e.target.result; // Set the new image source
+            };
+            
+            reader.readAsDataURL(fileInput.files[0]); // Read the file
+        }
+    }
+</script>
+
+
+{% endblock %}
+
+

@@ -1,0 +1,202 @@
+{% extends 'layouts/sub_base.html' %}
+{% load static %}
+
+{% block title %}About Us - Nexus Job Portal{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    /* Header Section */
+    .about-header {
+        background: linear-gradient(to right, #f5e8e8, #cac9c9);
+        color: rgb(56, 55, 55);
+        padding: 10px 0;
+        
+    }
+
+    .about-header h1 {
+        font-size: 2.8rem;
+        font-weight: bold;
+    }
+
+    /* About Us Section */
+    .about-us-section {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 50px 0 ;
+    }
+
+    .about-us-text {
+        flex: 1;
+        padding: 20px;
+        animation: fadeInLeft 1s ease-in-out;
+    }
+
+    .about-us-text h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .about-us-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #666;
+    }
+
+    .about-us-image {
+        flex: 1;
+        overflow: hidden;
+        animation: fadeInRight 1s ease-in-out;
+    }
+
+    .about-us-image img {
+        width: 100%;
+        border-radius: 15px;
+        transition: transform 0.5s ease;
+    }
+
+    .about-us-image img:hover {
+        transform: scale(1.05);
+    }
+
+    .brand-name{
+        color: crimson;
+    }
+
+    /* Features Section */
+    .features .feature-box {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .features .feature-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .features .feature-box img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .features h5 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Animations */
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Footer */
+    footer {
+        background: #e1e1e2;
+        color: #333;
+        padding: 20px 0;
+        border-radius: 15px;
+    }
+
+    footer p {
+        margin: 0;
+        text-align: center;
+        color: black;
+    }
+</style>
+{% endblock %}
+
+{% block sub_content %}
+
+<!-- About Us Header -->
+<header class="about-header d-flex align-items-center text-center" style="margin-top: 10px; border-radius: 10px;">
+    <div class="container">
+        <h1 class="header-title">Welcome to Nexus</h1>
+        <p class="header-subtitle">Your gateway to connecting talent with opportunity.</p>
+    </div>
+</header>
+
+<!-- About Us Section -->
+<section class="about-us-section">
+    <div class="container d-flex">
+        <div class="about-us-text">
+            <h2>About Nexus</h2>
+            <p>
+                At <span class="brand-name">Nexus</span>,  we are revolutionizing how talented individuals connect with leading employers globally. 
+                Our mission is to simplify the job search process while empowering organizations to find exceptional talent effortlessly. We leverage innovative technology, data-driven insights, and personalized solutions to bridge the gap between candidates and companies, fostering meaningful connections that drive success.
+                 With a commitment to excellence and a passion for unlocking potential, Nexus is dedicated to shaping the future of work and empowering careers worldwide.
+            </p>
+        </div>
+        <div class="about-us-image">
+            <img src="{% static 'main/about.webp' %}" alt="About Us">
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features py-5" style="margin: auto;">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Features</h2>
+        <div class="row g-4">
+            <!-- Feature Boxes -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-box">
+                    <img src="{% static 'main/job_seekers.svg' %}" alt="Job Seekers" style="width: 120px; height: 120px;">
+                    <h5>For Job Seekers</h5>
+                    <p>Discover your dream job with advanced tools, expert advice, and a platform built for your success.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-box">
+                    <img src="{% static 'main/employeers.svg' %}" alt="Employers" style="width: 120px; height: 120px;">
+                    <h5>For Employers</h5>
+                    <p>Unlock access to a pool of top-tier talent, streamline your hiring process, and build the team of your dreams.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-box">
+                    <img src="{% static 'main/global_reach.svg' %}" alt="Global Reach" style="width: 120px; height: 120px;">
+                    <h5>Global Reach</h5>
+                    <p>Connect with professionals and companies worldwide, fostering innovation and breaking geographical barriers.</p>
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer>
+                <p>&copy; {{ now|date:"Y" }} Nexus Job Portal. All Rights Reserved.</p>
+            </footer>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

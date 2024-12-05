@@ -1,0 +1,194 @@
+{% extends 'layouts/sub_base.html' %}
+{% load static %}
+{% block title %}
+    Job Details
+{% endblock %}
+
+{% block style %}
+<style>
+    /* Job Detail Card */
+    .job-detail-card {
+        display: flex;
+        flex-wrap: wrap;
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Job Image */
+    .job-image {
+        flex: 1;
+        max-width: 45%;
+        margin-left: 20px;
+        text-align: center;
+        position: relative;
+        border-radius: 15px;
+        height: 300px; /* Ensures the container takes up vertical space */
+    }
+
+    .job-image img {
+        width: 100%;
+        height: 100%; /* Ensures the image fills the container vertically */
+        object-fit: cover; /* Ensures the image covers the entire area without distortion */
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        animation: zoomIn 1s ease-in-out;
+    }
+
+    /* Job Details */
+    .job-detail-content {
+        flex: 2;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .job-detail-content h5 {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .job-detail-content p {
+        font-size: 1rem;
+        line-height: 1.4;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    /* Apply Button */
+    .animate-apply {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .animate-apply:hover {
+        background-color: #007bff;
+        color: #fff;
+        transform: scale(1.1);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .job-detail-card {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .job-image {
+            max-width: 100%;
+            margin: 0;
+            height: 250px; /* Adjust for smaller screens */
+        }
+
+        .job-detail-content {
+            max-width: 200%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block sub_content %}
+<div class="container mt-4">
+    <div class="job-detail-card shadow-lg rounded-3">
+        <!-- Job Details -->
+        <div class="job-detail-content">
+            <h2 class="text-center text-primary mb-3">Job Details</h2>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Title</b></h5>
+                <p class="text-dark">{{ job.title }}</p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Company Name</b></h5>
+                <p class="text-dark">{{ job.company_name }}</p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Description</b></h5>
+                <p class="text-dark">{{ job.description }}</p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Location</b></h5>
+                <p class="text-dark">{{ job.location }}</p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Category</b></h5>
+                <p class="text-dark">{{ job.category.title }}</p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Experience Required</b></h5>
+                <p class="text-dark">
+                    {% if job.experience_required %}
+                        {{ job.experience_required }}
+                    {% else %}
+                        Not Specified
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Salary</b></h5>
+                <p class="text-dark">{{ job.salary }}</p>
+            </div>
+
+            <div class="mb-2">
+                <h5 class="text-secondary"><b>Application Deadline</b></h5>
+                <p class="text-dark">{{ job.apply_before }}</p>
+            </div>
+
+            <div class="text-center mt-3">
+                {% if request.user.is_authenticated %}
+                    {% if has_applied %}
+                        <button class="btn btn-success px-4 py-2" disabled>Applied</button>
+                    {% else %}
+                        <a href="{% url 'apply_job' job.id %}" class="btn btn-outline-primary px-4 py-2 animate-apply">Apply Now</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'user_login' %}" class="btn btn-outline-primary px-4 py-2 animate-apply">Login to Apply</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Job Image -->
+        <div class="job-image">
+            {% if job.image %}
+                <img src="{{ job.image.url }}" alt="{{ job.title }}">
+            {% else %}
+                <img src="{% static 'main/job/offer.svg' %}" alt="Default Image">
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

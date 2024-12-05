@@ -1,0 +1,162 @@
+{% extends 'layouts/sub_base.html' %}
+{% load static %}
+{% block style %}
+<style>
+    /* Container styling */
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Form styling */
+    .form-container {
+        flex: 1;
+        max-width: 500px;
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2rem;
+    }
+
+    .form-group label {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control:focus {
+        box-shadow: 0px 0px 5px #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success {
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+    /* Image styling */
+    .image-container {
+        flex: 1;
+        max-width: 500px;
+        padding: 30px;
+        text-align: center;
+        margin: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+    }
+
+    .image-container img {
+        width: 100%;
+        max-width: 450px;
+        border-radius: 15px;
+        animation: zoomIn 2s ease-in-out infinite;
+    }
+
+    @keyframes zoomIn {
+        0% {
+            transform: scale(0.95);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(0.95);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .form-container, .image-container {
+            max-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block sub_content %}
+<div class="container my-5">
+    <!-- Form Section -->
+    <div class="form-container">
+        <h2>Contact Us</h2>
+        <form method="post" action="{% url 'contact_us' %}">
+            {% csrf_token %}
+            
+            <!-- Name Field -->
+            <div class="form-group mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" maxlength="20" required>
+            </div>
+            
+            <!-- Company Name Field -->
+            <div class="form-group mb-3">
+                <label for="company_name" class="form-label">Company Name:</label>
+                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Enter your company name" maxlength="255" required>
+            </div>
+            
+            <!-- Email Field -->
+            <div class="form-group mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            
+            <!-- Phone Number Field -->
+            <div class="form-group mb-3">
+                <label for="phone_number" class="form-label">Phone Number:</label>
+                <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="Enter your phone number" maxlength="14" required>
+            </div>
+            
+            <!-- Message Field -->
+            <div class="form-group mb-3">
+                <label for="message" class="form-label">Message:</label>
+                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here" maxlength="1000" required></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-success px-5 py-2">Send Message</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Image Section -->
+    <div class="image-container">
+        <img src="{% static 'main/contact_us.png' %}" alt="Contact Image">
+    </div>
+</div>
+{% endblock %}

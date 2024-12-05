@@ -1,0 +1,145 @@
+{% extends 'layouts/sub_base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block style %}
+    <style>
+        #resend {
+            color: white;
+            text-decoration: none;
+            font-weight: lighter;
+        }
+
+        #resend:hover {
+            text-decoration: underline;
+        }
+
+        .card-body p {
+            margin: 3px;
+            color: grey;
+        }
+
+        .job-title {
+            color: black;
+            text-decoration: none;
+        }
+
+        .job-title:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+{% endblock %}
+
+{% block sub_content %}
+    {% if request.user.is_authenticated and not request.user.is_verified %}
+        <div id="cross-message"
+             style="background-color: grey; color: white; width: 40%; padding: 5px; border-radius: 15px;margin: auto">
+            <h5 style="margin-left: 3px; cursor: pointer">
+                Please activate your email
+                <a id="resend" href="{% url 'resend_ac_activation' request.user.id %}"><small>Resend email activation</small></a>
+                <sup style="margin-left: 1px" onclick="hideMessage()">x</sup>
+            </h5>
+        </div>
+
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <br>
+                    <label>Filter by category:</label>
+                    <select class="form-control">
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <br><br>
+                    <form method="get">
+                        <input style="width: 60%; display: inline" placeholder="Search..." type="text" class="form-control" name="search" value="{{ request.GET.search }}">
+                        <button style="margin-left: 5px" class="btn btn-success" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <br><br>
+            <a href="{% url 'home_page' %}" class="btn btn-primary"> Clear</a>
+        </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap;">
+        
+        {% for job in object_list %}
+            <div class="card" style="flex: 0 0 30%; margin: 5px; padding: 10px; width: 20%;">
+                {% if job.image %}
+                <img class="card-img-top" style="height: 180px; width: 300px; margin: auto;" src="{{ job.image.url }}" alt="{{ job.title }}">
+            {% else %}
+                <img class="card-img-top" style="height: 60%; width: 60%" src="{% static 'main/job/offer.svg' %}" alt="Default Image">
+            {% endif %}
+                <hr>
+                <div class="card-body">
+                    <h5><a href="{% url 'job_detail' job.id %}" class="job-title">{{ job.title }}</a></h5>
+                    <p class="card-text"><i class="fa fa-map-marker"></i> {{ job.location }}</p>
+                    <p class="card-text"><i class="fa-solid fa-list"></i> {{ job.category.title }}</p>
+                    <p class="card-text" style="font-size: 0.8rem; color: red"><i
+                            class="fa fa-clock-o"></i> {{ job.apply_before }}</p>
+                    {% if request.user.is_authenticated %}
+                    {% if not job.applied %}
+                        <a href="#" data-toggle="modal" data-target="#apply_{{ job.id }}"
+                        
+                           class="btn btn-outline-primary" style="float: right">Apply Now</a>
+                           {% else %}
+                           <button class="btn btn-outline-primary" disabled style="float: right;">Applied</button>
+                           {% endif %}
+
+                        <div class="modal fade" id="apply_{{ job.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Apply to job {{ job.title }}</h5>
+                                            <span class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true" style="margin-left: 15px; text-decoration: none; cursor: pointer">&times;</span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to apply for this job?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <a href="{% url 'apply_job' job.id %}" type="button" class="btn btn-primary">Confirm</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                    {% if not job.applied %}
+                        <a href="{% url 'user_login' %}" class="btn btn-outline-primary" style="float: right">
+                            
+                            Apply
+                            Now</a>
+                            {% else %}
+                            <button class="btn btn-outline-primary" disabled>Applied</button>
+                            {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+    {% if is_paginated %}
+        {% include 'includes/pagination.html' %}
+    {% endif %}
+    <div style="height: 50px"></div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function hideMessage() {
+            messg = document.getElementById("cross-message")
+            messg.style.display = "none"
+        }
+    </script>
+{% endblock %}
