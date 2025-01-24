@@ -37,8 +37,12 @@
         {% for application in object_list %}
             <div class="card" style="flex: 0 0 30%; margin: 5px; padding: 10px; width: 20%">
                 <!-- Job Image -->
-                <img class="card-img-top" style="height: 180px; width: 250px; margin: auto;" 
-                     src="{% if application.job.image %}{{ application.job.image.url }}{% else %}{% static 'main/job/job.svg' %}{% endif %}" 
+                <img class="card-img-top" style="height: 180px; width: 300px; margin: auto;" 
+                     src="{% if application.job.image %}
+                     {{ application.job.image.url }}
+                     {% else %}
+                     {% static 'main/job/job.svg' %}
+                     {% endif %}" 
                      alt="{{ application.job.title }} Image">
                 <hr>
                 <div class="card-body">

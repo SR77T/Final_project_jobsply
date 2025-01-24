@@ -45,29 +45,19 @@
 
     {% endif %}
     <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-6">
-                    <br>
-                    <label>Filter by category:</label>
-                    <select class="form-control">
-                        {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <br><br>
-                    <form method="get">
-                        <input style="width: 60%; display: inline" placeholder="Search..." type="text" class="form-control" name="search" value="{{ request.GET.search }}">
+        <div class="col-md-12">
+            <br>
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input style="width: 100%; display: inline" placeholder="Search..." type="text" class="form-control" name="search" value="{{ request.GET.search }}">
+                    </div>
+                    <div class="col-md-2">
                         <button style="margin-left: 5px" class="btn btn-success" type="submit">Submit</button>
-                    </form>
+                        <a href="{% url 'home_page' %}" class="btn btn-primary"> Clear</a>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <br><br>
-            <a href="{% url 'home_page' %}" class="btn btn-primary"> Clear</a>
+            </form>
         </div>
     </div>
     <div style="display: flex; flex-wrap: wrap;">
@@ -75,9 +65,11 @@
         {% for job in object_list %}
             <div class="card" style="flex: 0 0 30%; margin: 5px; padding: 10px; width: 20%;">
                 {% if job.image %}
-                <img class="card-img-top" style="height: 180px; width: 300px; margin: auto;" src="{{ job.image.url }}" alt="{{ job.title }}">
+                <a href="{% url 'job_detail' job.id %}">
+                <img class="card-img-top" style="height: 180px; width: 300px; margin: auto;" src="{{ job.image.url }}" alt="{{ job.title }}" > </a>
             {% else %}
-                <img class="card-img-top" style="height: 60%; width: 60%" src="{% static 'main/job/offer.svg' %}" alt="Default Image">
+            <a href="{% url 'job_detail' job.id %}">
+                <img class="card-img-top" style="height: 60%; width: 60%" src="{% static 'main/job/offer.svg' %}" alt="Default Image"> </a>
             {% endif %}
                 <hr>
                 <div class="card-body">
@@ -141,5 +133,9 @@
             messg = document.getElementById("cross-message")
             messg.style.display = "none"
         }
+
+    
     </script>
+
+    
 {% endblock %}

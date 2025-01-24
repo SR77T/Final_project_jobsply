@@ -30,6 +30,7 @@ class HomePageView(ListView):
         category_id = self.request.GET.get("category")
         if category_id:
             qs = qs.filter(category_id=category_id)
+            
         return qs
 
     def get_context_data(self, *args, **kwargs):
@@ -117,3 +118,14 @@ class ContactView(CreateView):
         else:
             messages.error(request, "Could not record your response !")
             return self.form_invalid(form)
+
+
+def filter_jobs_by_category(request):
+    category_id = request.GET.get('category_id')
+    
+    if category_id:
+        jobs = Job.objects.filter(category_id=category_id)  # Filter jobs by category
+    else:
+        jobs = Job.objects.all()  # If no category is selected, show all jobs
+
+    return render(request, 'jobs/job_list.html', {'object_list': jobs})  # Render a template with the filtered jobs

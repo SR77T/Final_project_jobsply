@@ -13,6 +13,8 @@ urlpatterns = [
     path("contact-us/", views.ContactView.as_view(), name="contact_us"),
 
 
+
+
     path("", views.HomePageView.as_view(), name = "home_page"),
 
 ]

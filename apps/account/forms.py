@@ -5,6 +5,7 @@ from apps.main.models import Contact
 
 
 
+
 User = get_user_model()
 
 
@@ -21,12 +22,16 @@ class UserRegisterForm(forms.ModelForm):
         model = User
         fields = ["email", "first_name", "middle_name", "last_name", "password", "confirm_password"]
         
+
+    
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class" : "form-control"})
+
+
 
         
     def clean(self):
