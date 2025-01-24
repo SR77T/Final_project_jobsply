@@ -64,3 +64,4 @@ class UserAccountActivation(DateTimeModel):
 
     def __str__(self):
         return f"key of {self.email}"
+

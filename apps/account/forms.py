@@ -40,16 +40,7 @@ class UserRegisterForm(forms.ModelForm):
             raise forms.ValidationError("Passwords didn't match")
         return super().clean()
 
-        # def clean_password1(self):
-        #     password1 = self.cleaned_data.get("password1")
-        #     print(password1)
-        #     if len(password1) < 8:
-        #         print("length validation")
-        #         raise forms.ValidationError("Password must be 8 characters long!")
-        #     if not re.search(r'\d', password1) or not re.search(r'[A-Za-z]', password1):
-        #         print("numbers and chars")
-        #         raise forms.ValidationError("Password must contain both numbers and characters.")
-        #     return password1
+        
 
 
 class UserLoginForm(forms.Form):
