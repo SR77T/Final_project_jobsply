@@ -78,28 +78,6 @@ class MyJobs(ListView):
         return JobApplication.objects.filter(user=self.request.user)
 
 
-class KhaltiPayment(TemplateView):
-    template_name = "main/khalti_payment.html"
-
-
-class PaymentVerify(View):
-    def post(self, *args, **kwargs):
-        verification_url = "https://khalti.com/api/v2/payment/verify/"
-        print(self.request.POST)
-        token = self.request.POST.get("token")
-        amount = 1000
-        data = dict(token=token, amount=amount)
-        headers = {
-            'Authorization': 'Key test_secret_key_7f05835f6e0c4511a35e2dd7eeacb82d'
-        }
-        response = requests.post(verification_url, data=data, headers=headers)
-        if response.status_code in [200, "200"]:
-            print("Payment Success !!")
-            messages.success(self.request, "Payment Success!!")
-            return redirect("home_page")
-        messages.error(self.request, "Could not verify the payment")
-        return redirect("home_page")
-
 class AboutUs(TemplateView):
     template_name = "main/about_us.html"
 
@@ -118,14 +96,3 @@ class ContactView(CreateView):
         else:
             messages.error(request, "Could not record your response !")
             return self.form_invalid(form)
-
-
-def filter_jobs_by_category(request):
-    category_id = request.GET.get('category_id')
-    
-    if category_id:
-        jobs = Job.objects.filter(category_id=category_id)  # Filter jobs by category
-    else:
-        jobs = Job.objects.all()  # If no category is selected, show all jobs
-
-    return render(request, 'jobs/job_list.html', {'object_list': jobs})  # Render a template with the filtered jobs

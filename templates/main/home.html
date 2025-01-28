@@ -5,6 +5,11 @@
 
 {% block style %}
     <style>
+        :root {
+            --card-gap: 1rem;
+            --card-min-width: 280px;
+        }
+
         #resend {
             color: white;
             text-decoration: none;
@@ -23,119 +28,200 @@
         .job-title {
             color: black;
             text-decoration: none;
+            word-break: break-word;
         }
 
         .job-title:hover {
             text-decoration: underline;
         }
 
+        .notification-banner {
+            background-color: grey;
+            color: white;
+            width: 90%;
+            max-width: 600px;
+            padding: 1rem;
+            border-radius: 15px;
+            margin: 1rem auto;
+        }
+
+        .search-container {
+            padding: 1rem;
+            width: 50%;
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
+            gap: var(--card-gap);
+            padding: 1rem;
+        }
+
+        .job-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .job-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .job-content {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .job-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .notification-banner {
+                width: 95%;
+                padding: 0.75rem;
+            }
+
+            .search-input,
+            .search-buttons {
+                width: 100%;
+            }
+
+            .search-buttons .btn {
+                flex: 1;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block sub_content %}
     {% if request.user.is_authenticated and not request.user.is_verified %}
-        <div id="cross-message"
-             style="background-color: grey; color: white; width: 40%; padding: 5px; border-radius: 15px;margin: auto">
-            <h5 style="margin-left: 3px; cursor: pointer">
+        <div id="cross-message" class="notification-banner">
+            <h5 style="margin: 0; display: flex; align-items: center; justify-content: space-between;">
                 Please activate your email
-                <a id="resend" href="{% url 'resend_ac_activation' request.user.id %}"><small>Resend email activation</small></a>
-                <sup style="margin-left: 1px" onclick="hideMessage()">x</sup>
+                <a id="resend" href="{% url 'resend_ac_activation' request.user.id %}">
+                    <small>Resend email activation</small>
+                </a>
+                <span style="cursor: pointer; padding: 0 0.5rem;" onclick="hideMessage()">×</span>
             </h5>
         </div>
-
     {% endif %}
-    <div class="row">
-        <div class="col-md-12">
-            <br>
-            <form method="get">
-                <div class="row">
-                    <div class="col-md-5">
-                        <input style="width: 100%; display: inline" placeholder="Search..." type="text" class="form-control" name="search" value="{{ request.GET.search }}">
-                    </div>
-                    <div class="col-md-2">
-                        <button style="margin-left: 5px" class="btn btn-success" type="submit">Submit</button>
-                        <a href="{% url 'home_page' %}" class="btn btn-primary"> Clear</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div style="display: flex; flex-wrap: wrap;">
-        
-        {% for job in object_list %}
-            <div class="card" style="flex: 0 0 30%; margin: 5px; padding: 10px; width: 20%;">
-                {% if job.image %}
-                <a href="{% url 'job_detail' job.id %}">
-                <img class="card-img-top" style="height: 180px; width: 300px; margin: auto;" src="{{ job.image.url }}" alt="{{ job.title }}" > </a>
-            {% else %}
-            <a href="{% url 'job_detail' job.id %}">
-                <img class="card-img-top" style="height: 60%; width: 60%" src="{% static 'main/job/offer.svg' %}" alt="Default Image"> </a>
-            {% endif %}
-                <hr>
-                <div class="card-body">
-                    <h5><a href="{% url 'job_detail' job.id %}" class="job-title">{{ job.title }}</a></h5>
-                    <p class="card-text"><i class="fa fa-map-marker"></i> {{ job.location }}</p>
-                    <p class="card-text"><i class="fa-solid fa-list"></i> {{ job.category.title }}</p>
-                    <p class="card-text" style="font-size: 0.8rem; color: red"><i
-                            class="fa fa-clock-o"></i> {{ job.apply_before }}</p>
-                    {% if request.user.is_authenticated %}
-                    {% if not job.applied %}
-                        <a href="#" data-toggle="modal" data-target="#apply_{{ job.id }}"
-                        
-                           class="btn btn-outline-primary" style="float: right">Apply Now</a>
-                           {% else %}
-                           <button class="btn btn-outline-primary" disabled style="float: right;">Applied</button>
-                           {% endif %}
 
-                        <div class="modal fade" id="apply_{{ job.id }}" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Apply to job {{ job.title }}</h5>
-                                            <span class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true" style="margin-left: 15px; text-decoration: none; cursor: pointer">&times;</span>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Are you sure you want to apply for this job?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                        </button>
-                                        <a href="{% url 'apply_job' job.id %}" type="button" class="btn btn-primary">Confirm</a>
+    <div class="search-container">
+        <form method="get" class="search-form">
+            <div class="search-input">
+                <input type="text"class="form-control" name="search" placeholder="Search..." value="{{ request.GET.search }}"
+                >
+            </div>
+            <div class="search-buttons">
+                <button class="btn btn-success" type="submit">Submit</button>
+                <a href="{% url 'home_page' %}" class="btn btn-primary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="jobs-grid">
+        {% for job in object_list %}
+            <div class="job-card">
+                <a href="{% url 'job_detail' job.id %}">
+                    {% if job.image %}
+                        <img class="job-image" src="{{ job.image.url }}" alt="{{ job.title }}">
+                    {% else %}
+                        <img class="job-image" src="{% static 'main/job/offer.svg' %}" alt="Default Image">
+                    {% endif %}
+                </a>
+                <div class="job-content">
+                    <h5><a href="{% url 'job_detail' job.id %}" class="job-title">{{ job.title }}</a></h5>
+                    <p><i class="fa fa-map-marker"></i> {{ job.location }}</p>
+                    <p><i class="fa-solid fa-list"></i> {{ job.category.title }}</p>
+                    <p style="font-size: 0.8rem; color: red"><i class="fa fa-clock-o"></i> {{ job.apply_before }}</p>
+                    
+                    <div class="job-footer">
+                        {% if request.user.is_authenticated %}
+                            {% if not job.applied %}
+                                <a href="#" data-toggle="modal" data-target="#apply_{{ job.id }}" 
+                                   class="btn btn-outline-primary w-100">Apply Now</a>
+                            {% else %}
+                                <button class="btn btn-outline-primary w-100" disabled>Applied</button>
+                            {% endif %}
+
+                            <div class="modal fade" id="apply_{{ job.id }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Apply to job {{ job.title }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to apply for this job?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a href="{% url 'apply_job' job.id %}" class="btn btn-primary">Confirm</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {% else %}
-                    {% if not job.applied %}
-                        <a href="{% url 'user_login' %}" class="btn btn-outline-primary" style="float: right">
-                            
-                            Apply
-                            Now</a>
+                        {% else %}
+                            {% if not job.applied %}
+                                <a href="{% url 'user_login' %}" class="btn btn-outline-primary w-100">Apply Now</a>
                             {% else %}
-                            <button class="btn btn-outline-primary" disabled>Applied</button>
+                                <button class="btn btn-outline-primary w-100" disabled>Applied</button>
                             {% endif %}
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         {% endfor %}
-
     </div>
+
     {% if is_paginated %}
         {% include 'includes/pagination.html' %}
     {% endif %}
+    
     <div style="height: 50px"></div>
 {% endblock %}
 
 {% block extra_js %}
     <script>
         function hideMessage() {
-            messg = document.getElementById("cross-message")
-            messg.style.display = "none"
+            const messg = document.getElementById("cross-message");
+            messg.style.display = "none";
         }
-
-    
     </script>
-
-    
 {% endblock %}

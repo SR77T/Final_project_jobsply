@@ -87,17 +87,6 @@ class UserProfileView(DetailView):
     template_name = "account/user_profile.html"
 
 
-    # def form_valid(self, form):
-    #     # cleaned_data = form.cleaned_data
-    #     bio = form.cleaned_data.pop("bio")
-    #     phone_number = form.cleaned_data.pop("phone_number")
-    #     pp = form.cleaned_data.pop("profile_picture")
-    #     student = form.save()
-    #     sp, _ = StudentProfile.objects.update_or_create(student = student, defaults = {"bio" : bio, "phone" : phone_number})
-    #     if pp:
-    #         sp.profile_picture = pp
-    #         sp.save()
-    #     return redirect("classbased:student_detail", student.id)
     
 
 

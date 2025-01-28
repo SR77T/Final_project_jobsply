@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+
 {% block content %}
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid" style="text-decoration: none;">
@@ -12,19 +13,22 @@
       &nbsp;<div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home_page' %}">Home</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'home_page' %}" >Home</a>
           </li>
+          
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'about_us' %}">About Us</a>
+          </li>
+
           {% if request.user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'my_jobs' %}">My Jobs</a>
           </li>
-          {% endif %}
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'about_us' %}">About Us</a>
-          </li>
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'contact_us' %}">Contact Us</a>
           </li>
+          {% endif %}
+          
 
         </ul>
        
