@@ -28,6 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Application definition
 
 INSTALLED_APPS = [
+    'django_daisy',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
