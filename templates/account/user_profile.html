@@ -7,59 +7,82 @@
 
 {% block sub_content %}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-12 col-md-4 mb-4 mb-md-0">
             {% if request.user.userprofile.profile_picture %}
-                <img src="{{ request.user.userprofile.profile_picture.url }}" alt="" style="height: 400px; width: 350px; border-radius: 10px; " >
-                {% else %}
-                <img src="{% static 'main/dummy.jpg' %}" style="height: 350px; width: 350px">
+                <img src="{{ request.user.userprofile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded" style="height: 400px; width: 350px;">
+            {% else %}
+                <img src="{% static 'main/dummy.jpg' %}" alt="Default Profile Picture" class="img-fluid rounded" style="height: 350px; width: 350px;">
             {% endif %}
         </div>
-        <div class="col-md-8">
+        <div class="col-12 col-md-8">
             <h2>User Profile</h2>
             <br>
-            <table class="table table-striped">
-                <tr>
-                    <td>Name</td>
-                    <td>{{ object.get_full_name }}</td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>{{ object.email }}</td>
-                </tr>
-                <tr>
-                    <td>Phone</td>
-                    <td>{% if object.userprofile.phone_number %}
-                        {{ object.userprofile.phone_number }}
-                        {% else %}
-                        ---
-                        {% endif %}</td>
-                </tr>
-                <tr>
-                    <td>Address</td>
-                    <td>{% if object.userprofile.address %}{{ object.userprofile.address }}{% else %}---{% endif %}</td>
-                </tr>
-                <tr>
-                    <td>Resume</td>
-                    <td>{% if object.userprofile.resume %}
-                        <a target="_blank" href="{{ object.userprofile.resume.url }}">View Resume</a>
-                    {% else %}---{% endif %}</td>
-                </tr>
-                <tr>
-                    <td>Bio</td>
-                    <td>{% if object.userprofile.bio %}
-                        {{ object.userprofile.bio }}
-                    {% else %}---{% endif %}</td>
-                </tr>
-
-                <tr>
-                    <td>Account Status</td>
-                    <td>{% if object.is_verified %}
-                        <span style="background-color: forestgreen; padding: 10px;">Activated</span>
-                    {% else %} <span style="background-color: tomato; padding: 5px; ">Not Activated</span>{% endif %}</td>
-                </tr>
-            </table>
-        <a href="{% url 'update_profile' user.id %}" class="btn btn-success">Update Profile</a>
-        <a href="{% url 'home_page' %}" class="btn btn-outline-success">Cancel</a>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ object.get_full_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ object.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>
+                            {% if object.userprofile.phone_number %}
+                                {{ object.userprofile.phone_number }}
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            {% if object.userprofile.address %}
+                                {{ object.userprofile.address }}
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Resume</td>
+                        <td>
+                            {% if object.userprofile.resume %}
+                                <a target="_blank" href="{{ object.userprofile.resume.url }}">View Resume</a>
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Bio</td>
+                        <td>
+                            {% if object.userprofile.bio %}
+                                {{ object.userprofile.bio }}
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Account Status</td>
+                        <td>
+                            {% if object.is_verified %}
+                                <span class="badge bg-success">Activated</span>
+                            {% else %}
+                                <span class="badge bg-danger">Not Activated</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="d-grid gap-2 d-md-block">
+                <a href="{% url 'update_profile' user.id %}" class="btn btn-success">Update Profile</a>
+                <a href="{% url 'home_page' %}" class="btn btn-outline-success">Cancel</a>
+            </div>
         </div>
     </div>
 {% endblock %}

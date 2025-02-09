@@ -1,8 +1,6 @@
 {% extends 'layouts/sub_base.html' %}
 {% load static %}
 
-
-
 {% block sub_content %}
     <div class="container mt-5">
         <h2 class="text-center mb-4">Update Profile</h2>
@@ -10,26 +8,26 @@
             {% csrf_token %}
             <div class="row">
                 <!-- Left Column for Profile Picture -->
-                <div class="col-md-4 text-center">
+                <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
                     <div class="profile-img-container mb-4">
                         {% if request.user.userprofile.profile_picture %}
                             <img src="{{ request.user.userprofile.profile_picture.url }}" 
-                                 class="rounded-circle shadow-sm" 
+                                 class="rounded-circle shadow-sm img-fluid" 
                                  style="height: 250px; width: 250px; object-fit: cover;" id="profileImagePreview">
                         {% else %}
                             <img src="{% static 'main/dummy.jpg' %}" 
-                                 class="rounded-circle shadow-sm" 
+                                 class="rounded-circle shadow-sm img-fluid" 
                                  style="height: 250px; width: 250px; object-fit: cover;" id="profileImagePreview">
                         {% endif %}
                     </div>
                     <div>
-                        <label for="profile_picture" class="btn btn-outline-primary btn-sm">Change Picture</label>
+                        <label for="profile_picture" class="btn btn-outline-primary btn-md">Change Picture</label>
                         <input type="file" name="profile_picture" id="profile_picture" class="d-none" onchange="previewProfileImage(event)">
                     </div>
                 </div>
 
                 <!-- Right Column for Profile Information -->
-                <div class="col-md-8">
+                <div class="col-12 col-md-8">
                     <div class="form-group mb-3">
                         <label for="first_name" class="form-label">First Name</label>
                         <input type="text" name="first_name" value="{{ user.first_name }}" id="first_name" class="form-control">
@@ -65,7 +63,7 @@
                         <textarea maxlength="1000" cols="30" name="bio" id="bio" class="form-control" rows="4">{{ user.userprofile.bio }}</textarea>
                     </div>
 
-                    <div class="form-group d-flex justify-content-between">
+                    <div class="form-group d-flex justify-content-between flex-wrap gap-2">
                         <button type="submit" class="btn btn-success px-4">Save Changes</button>
                         <a class="btn btn-outline-danger px-4" href="{% url 'user_profile' user.id %}">Cancel</a>
                     </div>
@@ -76,7 +74,6 @@
 {% endblock %}
 
 {% block extra_js %}
-
 <script>
     function previewProfileImage(event) {
         const fileInput = event.target;
@@ -93,8 +90,4 @@
         }
     }
 </script>
-
-
 {% endblock %}
-
-

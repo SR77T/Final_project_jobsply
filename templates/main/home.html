@@ -183,6 +183,44 @@
         {% endfor %}
     </div>
 
+    <!-- Recommended Jobs Section -->
+    {% if has_applied_jobs and recommended_jobs %}
+        <h2 style="margin: 20px 10px">Recommended for You</h2>
+        <div class="card-container">
+            {% for job in recommended_jobs %}
+                <div class="card">
+                    {% if job.image %}
+                        <a href="{% url 'job_detail' job.id %}">
+                            <img class="card-img-top" src="{{ job.image.url }}" alt="{{ job.title }}">
+                        </a>
+                    {% else %}
+                        <a href="{% url 'job_detail' job.id %}">
+                            <img class="card-img-top" src="{% static 'main/job/offer.svg' %}" alt="Default Image">
+                        </a>
+                    {% endif %}
+                    <hr>
+                    <div class="card-body">
+                        <h5><a href="{% url 'job_detail' job.id %}" class="job-title">{{ job.title }}</a></h5>
+                        <p class="card-text"><i class="fa fa-map-marker"></i> {{ job.location }}</p>
+                        <p class="card-text"><i class="fa-solid fa-list"></i> {{ job.category.title }}</p>
+                        <p class="card-text" style="font-size: 0.8rem; color: red"><i class="fa fa-clock-o"></i> {{ job.apply_before }}</p>
+                        {% if request.user.is_authenticated %}
+                            {% if not job.applied %}
+                                <a href="#" data-toggle="modal" data-target="#apply_{{ job.id }}"
+                                   class="btn btn-outline-primary" style="float: right">Apply Now</a>
+                                   {% else %}
+                                   <button class="btn btn-outline-primary" disabled style="float: right;">Applied</button>
+                               {% endif %}
+                           {% else %}
+                               <a href="{% url 'user_login' %}" class="btn btn-outline-primary" style="float: right">Apply Now</a>
+                           {% endif %}
+                       </div>
+                   </div>
+               {% endfor %}
+           </div>
+       {% endif %}
+
+
     {% if is_paginated %}
         {% include 'includes/pagination.html' %}
     {% endif %}
@@ -195,5 +233,11 @@
             messg = document.getElementById("cross-message")
             messg.style.display = "none"
         }
+
+        
+
     </script>
 {% endblock %}
+
+
+

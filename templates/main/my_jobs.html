@@ -29,35 +29,77 @@
             text-decoration: underline;
         }
 
+        .card {
+            margin-bottom: 20px;
+            height: 100%; /* Ensure all cards have the same height */
+        }
+
+        .card-img-top {
+            height: 180px;
+            width: 100%; /* Ensure images take full width */
+            object-fit: cover; /* Maintain aspect ratio */
+            /* border-radius: 20px; */
+            
+        }
+
+        /* Ensure only 3 cards per row */
+        .job-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px; /* Spacing between cards */
+        }
+
+        .job-card {
+            flex: 1 1 calc(33.33% - 15px); /* 3 cards per row */
+            max-width: calc(33.33% - 15px); /* 3 cards per row */
+        }
+
+        @media (max-width: 992px) {
+            .job-card {
+                flex: 1 1 calc(50% - 15px); /* 2 cards per row on medium screens */
+                max-width: calc(50% - 15px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .job-card {
+                flex: 1 1 calc(100% - 15px); /* 1 card per row on small screens */
+                max-width: calc(100% - 15px);
+            }
+        }
     </style>
 {% endblock %}
 
 {% block sub_content %}
-    <div style="display: flex; flex-wrap: wrap;">
+    <div class="job-container">
         {% for application in object_list %}
-            <div class="card" style="flex: 0 0 30%; margin: 5px; padding: 10px; width: 20%">
-                <!-- Job Image -->
-                <img class="card-img-top" style="height: 180px; width: 300px; margin: auto;" 
-                     src="{% if application.job.image %}
-                     {{ application.job.image.url }}
-                     {% else %}
-                     {% static 'main/job/job.svg' %}
-                     {% endif %}" 
-                     alt="{{ application.job.title }} Image">
-                <hr>
-                <div class="card-body">
-                    <h5><a href="{% url 'job_detail' application.job.id %}" class="job-title">{{ application.job.title }}</a></h5>
-                    <p class="card-text"><i class="fa fa-map-marker"></i> {{ application.job.location }}</p>
-                    <p class="card-text"><i class="fa-solid fa-list"></i> {{ application.job.category.title }}</p>
-                    <p>Status: {{ application.status }}</p>
-                    <p class="card-text" style="font-size: 0.8rem; color: red"><i class="fa fa-clock-o"></i> {{ application.job.apply_before }}</p>
+            <div class="job-card"><br>
+                <div class="card h-100">
+                    <!-- Job Image -->
+                    <img class="card-img-top" 
+                         src="{% if application.job.image %}
+                         {{ application.job.image.url }}
+                         {% else %}
+                         {% static 'main/job/job.svg' %}
+                         {% endif %}" 
+                         alt="{{ application.job.title }} Image">
+                    <hr>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'job_detail' application.job.id %}" class="job-title">{{ application.job.title }}</a>
+                        </h5>
+                        <p class="card-text"><i class="fa fa-map-marker"></i> {{ application.job.location }}</p>
+                        <p class="card-text"><i class="fa-solid fa-list"></i> {{ application.job.category.title }}</p>
+                        <p>Status: {{ application.status }}</p>
+                        <p class="card-text" style="font-size: 0.8rem; color: red">
+                            <i class="fa fa-clock-o"></i> {{ application.job.apply_before }}
+                        </p>
+                    </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 
-
-    </div>
     {% if is_paginated %}
         {% include 'includes/pagination.html' %}
     {% endif %}
@@ -67,8 +109,10 @@
 {% block extra_js %}
     <script>
         function hideMessage() {
-            messg = document.getElementById("cross-message")
-            messg.style.display = "none"
+            const messg = document.getElementById("cross-message");
+            if (messg) {
+                messg.style.display = "none";
+            }
         }
     </script>
 {% endblock %}

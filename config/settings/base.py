@@ -30,6 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 INSTALLED_APPS = [
     'django_daisy',
     'django.contrib.admin',
+    # 'hide_admin.apps.HideAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
